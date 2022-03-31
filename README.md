@@ -1,6 +1,6 @@
-# Simple React + Firebase Auth + Firestore App
+# Simple React App with User Profiles using Firebase Auth + Firestore
 
-This repository is a React (v18) app that uses a simple, *reusable* pattern for connecting to Firebase services and leveraging Firebase Authentication (and Firestore) for user registration, login, logout and "watching" user profile data in real-time.
+This repository is a React (v18) app that uses a simple, *reusable* pattern for connecting to Firebase services and leveraging Firebase Authentication and Firestore for user registration, login, logout and "dynamically watching" user profile data in real-time.
 
 This project was created with `npx create-react-app` but includes some tweaks to `index.js` based on the new React 18 [createRoot](https://github.com/reactwg/react-18/discussions/5).
 
@@ -20,6 +20,8 @@ Now your browser should automatically open to http://localhost:3000/
 1. If you have an existing account in your Firebase Authentication the enter the email, password and click the Login button.
 1. If you'd like to register a new account, click the Register New Account button.
 1. Once logged in, you will be presented with the `displayName` and `email` values that are in Firestore >> `users` >> [the UID from Firebase Auth]
+
+You might also keep the "Hello" page showing and use Firebase Console >> Firestore to change the `displayName` of the user document.  You will see the React app update its UI in real-time.
 
 ## To Use This Project In Your Own React App
 
