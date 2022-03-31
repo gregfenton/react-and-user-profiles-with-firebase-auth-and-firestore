@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+# Simple React + Firebase Auth + Firestore App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository is a React (v18) app that uses a simple, *reusable* pattern for connecting to Firebase services and leveraging Firebase Authentication (and Firestore) for user registration, login, logout and "watching" user profile data in real-time.
 
-## Available Scripts
+This project was created with `npx create-react-app` but includes some tweaks to `index.js` based on the new React 18 [createRoot](https://github.com/reactwg/react-18/discussions/5).
 
-In the project directory, you can run:
+## To Run This Project
 
-### `npm start`
+1. `git clone https://github.com/gregfenton/react-and-firebase-auth-and-firestore.git`
+1. `cd react-firebase-auth-and-firestore`
+1. Open your favourite code editor (e.g. `code .` to run VSCode on this project)
+1. Ensure your Firebase project has enabled the Email/Password sign-in provider:
+   - Firebase Console >> YOUR_PROJECT >> Authentication >> Sign-In Method
+   - If "Email/Password" is not listed under Sign-In Providers, click *Add New Provider* and add it
+   - Ensure that Email/Password is *Enabled*
+1. Edit the file `FirebaseProvider.js` and update the values in `firebaseConfig` with those of your Firebase project (see comments in the code)
+1. `npm run start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Now your browser should automatically open to http://localhost:3000/
+1. If you have an existing account in your Firebase Authentication the enter the email, password and click the Login button.
+1. If you'd like to register a new account, click the Register New Account button.
+1. Once logged in, you will be presented with the `displayName` and `email` values that are in Firestore >> `users` >> [the UID from Firebase Auth]
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## To Use This Project In Your Own React App
 
-### `npm test`
+The main parts of this app that is *reusable* are `FirebaseProvider` and `AuthProvider`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To use them, copy these two files into your React app, and somewhere near the top of your app's component tree "wrap" the parts of your app you want to use Firebase in with these two providers.
 
-### `npm run build`
+From `App.js`:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```js
+  return (
+    <FirebaseProvider>
+      <AuthProvider>
+    
+        <RestOfTheApp />
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+      </AuthProvider>
+    </FirebaseProvider>
+  );
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+where `<RestOfTheApp />` represents the rest of your app (could be one component, or it could be a long list of JSX code).
