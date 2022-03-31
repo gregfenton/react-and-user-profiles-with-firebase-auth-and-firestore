@@ -12,7 +12,7 @@ import { FirebaseContext } from './FirebaseProvider';
 
 export const AuthContext = createContext({});
 
-const USERS_COLL = 'users'; // name of the FS collection of user profile docs
+const PROFILE_COLLECTION = 'users'; // name of the FS collection of user profile docs
 
 export const AuthProvider = (props) => {
   const children = props.children;
@@ -109,10 +109,13 @@ export const AuthProvider = (props) => {
     let unsubscribe = null;
     const listenToUserDoc = async (uid) => {
       try {
-        let docRef = doc(myFS, USERS_COLL, uid);
+        let docRef = doc(myFS, PROFILE_COLLECTION, uid);
         unsubscribe = await onSnapshot(docRef, (docSnap) => {
           let profileData = docSnap.data();
           console.log('Got user profile:', profileData);
+          if (!profileData) {
+            setAuthErrorMessage(`No profile doc found in Firestore at: ${docRef.path}`);
+          }
           setProfile(profileData);
         });
       } catch (ex) {
@@ -130,6 +133,7 @@ export const AuthProvider = (props) => {
     } else if (!user) {
       setAuthLoading(true);
       setProfile(null);
+      setAuthErrorMessage(null);
     }
   }, [user, setProfile, myFS]);
 

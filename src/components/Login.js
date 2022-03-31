@@ -77,7 +77,7 @@ export const Login = () => {
                 >
                   Login
                 </button>
-                {errorMessage && (
+                {(errorMessage || authErrorMessage )&& (
                   <>
                     <br />
                     <h3 style={{ color: 'red' }}>{errorMessage}</h3>
