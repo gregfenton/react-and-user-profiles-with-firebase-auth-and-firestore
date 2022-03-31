@@ -12,6 +12,8 @@ import { FirebaseContext } from './FirebaseProvider';
 
 export const AuthContext = createContext({});
 
+const USERS_COLL = 'users'; // name of the FS collection of user profile docs
+
 export const AuthProvider = (props) => {
   const children = props.children;
 
@@ -107,7 +109,7 @@ export const AuthProvider = (props) => {
     let unsubscribe = null;
     const listenToUserDoc = async (uid) => {
       try {
-        let docRef = doc(myFS, `users/${uid}`);
+        let docRef = doc(myFS, USERS_COLL, uid);
         unsubscribe = await onSnapshot(docRef, (docSnap) => {
           let profileData = docSnap.data();
           console.log('Got user profile:', profileData);
