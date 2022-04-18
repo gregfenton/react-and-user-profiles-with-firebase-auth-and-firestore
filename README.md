@@ -8,6 +8,7 @@ This project was created with `npx create-react-app` but includes some tweaks to
 
 1. `git clone https://github.com/gregfenton/react-and-firebase-auth-and-firestore.git`
 1. `cd react-firebase-auth-and-firestore`
+1. `npm install`  to install the NPM dependencies
 1. Open your favourite code editor (e.g. `code .` to run VSCode on this project)
 1. Ensure your Firebase project has enabled the Email/Password sign-in provider:
    - Firebase Console >> YOUR_PROJECT >> Authentication >> Sign-In Method
