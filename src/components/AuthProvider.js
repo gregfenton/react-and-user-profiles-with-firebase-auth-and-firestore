@@ -91,17 +91,19 @@ export const AuthProvider = (props) => {
 
   // hook into Firebase Authentication
   useEffect(() => {
-    let unsubscribe = onAuthStateChanged(myAuth, (user) => {
-      // if user is null, then we force them to login
-      console.log('onAuthStateChanged(): got user', user);
-      if (user) {
-        setUser(user);
-      }
+    if (myAuth) {
+      let unsubscribe = onAuthStateChanged(myAuth, (user) => {
+        // if user is null, then we force them to login
+        console.log('onAuthStateChanged(): got user', user);
+        if (user) {
+          setUser(user);
+        }
 
-      setAuthLoading(false);
-    });
+        setAuthLoading(false);
+      });
 
-    return unsubscribe;
+      return unsubscribe;
+    }
   }, [myAuth]);
 
   // listen to the user profile (FS User doc)
