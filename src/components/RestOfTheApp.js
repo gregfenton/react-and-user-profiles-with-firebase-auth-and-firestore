@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AuthContext } from './AuthProvider';
+import { AuthContext } from '../providers/AuthProvider';
 import { Login } from './Login';
 
 const styleBottomCenter = {

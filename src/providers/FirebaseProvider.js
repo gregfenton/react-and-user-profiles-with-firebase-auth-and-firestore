@@ -17,13 +17,6 @@ const firebaseConfig = {
   //      >> Add App >> Web app  (or use an existing app)
   //      >> Firebase SDK snippet
   //      >> Config
-
-  apiKey: '',
-  authDomain: '',
-  projectId: '',
-  storageBucket: '',
-  messagingSenderId: '',
-  appId: '',
 };
 
 export const FirebaseProvider = (props) => {

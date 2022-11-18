@@ -1,6 +1,6 @@
 import React from "react";
-import { AuthProvider } from "./components/AuthProvider";
-import { FirebaseProvider } from "./components/FirebaseProvider";
+import { AuthProvider } from "./providers/AuthProvider";
+import { FirebaseProvider } from "./providers/FirebaseProvider";
 import { RestOfTheApp } from "./components/RestOfTheApp";
 
 export const App = () => {

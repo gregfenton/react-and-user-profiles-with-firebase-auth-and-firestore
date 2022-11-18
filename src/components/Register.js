@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { AuthContext } from './AuthProvider';
+import { AuthContext } from '../providers/AuthProvider';
 
 export const Register = () => {
-  const { register, authErrorMessage } = useContext(AuthContext);
+  const { register, authErrorMessages } = useContext(AuthContext);
 
   const [displayName, setDisplayName] = useState(''); // input field value cannot be null
   const [email, setEmail] = useState(''); // input field value cannot be null
@@ -80,7 +80,11 @@ export const Register = () => {
                   <>
                     <br />
                     <h3 style={{ color: 'red' }}>{errorMessage}</h3>
-                    <h4 style={{ color: 'red' }}>{authErrorMessage}</h4>
+                    {authErrorMessages?.map((errorLine, idx) => (
+                      <h4 key={`errmsg-${idx}`} style={{ color: 'red' }}>
+                        {errorLine}
+                      </h4>
+                    ))}
                   </>
                 )}
               </td>

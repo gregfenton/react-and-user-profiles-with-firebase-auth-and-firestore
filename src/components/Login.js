@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { AuthContext } from './AuthProvider';
+import { AuthContext } from '../providers/AuthProvider';
 import { Register } from './Register';
 
 export const Login = () => {
-  const { login, authErrorMessage } = useContext(AuthContext);
+  const { login, authErrorMessages } = useContext(AuthContext);
 
   const [email, setEmail] = useState(''); // input field value cannot be null
   const [password, setPassword] = useState(''); // input field value cannot be null
@@ -37,6 +37,7 @@ export const Login = () => {
       </div>
     );
   }
+
   return (
     <div>
       <h2>Sign In To Existing Account</h2>
@@ -71,17 +72,18 @@ export const Login = () => {
           <tr>
             {!loginRunning ? (
               <td colSpan={2} style={{ textAlign: 'center' }}>
-                <button
-                  style={{ width: '75%' }}
-                  onClick={handleButtonClick}
-                >
+                <button style={{ width: '75%' }} onClick={handleButtonClick}>
                   Login
                 </button>
-                {(errorMessage || authErrorMessage )&& (
+                {(errorMessage || authErrorMessages) && (
                   <>
                     <br />
                     <h3 style={{ color: 'red' }}>{errorMessage}</h3>
-                    <h4 style={{ color: 'red' }}>{authErrorMessage}</h4>
+                    {authErrorMessages?.map((errorLine, idx) => (
+                      <h4 key={`errmsg-${idx}`} style={{ color: 'red' }}>
+                        {errorLine}
+                      </h4>
+                    ))}
                   </>
                 )}
               </td>

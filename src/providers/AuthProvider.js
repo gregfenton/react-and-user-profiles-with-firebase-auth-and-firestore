@@ -20,17 +20,28 @@ export const AuthProvider = (props) => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [authErrorMessage, setAuthErrorMessage] = useState();
+  const [authErrorMessages, setAuthErrorMessages] = useState();
 
   const { myAuth, myFS } = useContext(FirebaseContext);
 
   const registerFunction = async (email, password, displayName = '') => {
+    let userCredential;
     try {
-      let userCredential = await createUserWithEmailAndPassword(
+      userCredential = await createUserWithEmailAndPassword(
         myAuth,
         email,
         password
       );
+    } catch (ex) {
+      console.error(`registerFunction() failed with: ${ex.message}`);
+      setAuthErrorMessages([
+        ex.message,
+        'Did you enable the Email Provider in Firebase Auth?',
+      ]);
+      return false;
+    }
+
+    try {
       let user = userCredential.user;
 
       let userDocRef = doc(myFS, 'users', user.uid);
@@ -41,11 +52,14 @@ export const AuthProvider = (props) => {
         dateCreated: serverTimestamp(),
       };
 
-      setDoc(userDocRef, userDocData);
+      await setDoc(userDocRef, userDocData);
       return true;
     } catch (ex) {
       console.error(`registerFunction() failed with: ${ex.message}`);
-      setAuthErrorMessage(ex.message);
+      setAuthErrorMessages([
+        ex.message,
+        'Did you enable the Firestore Database in your Firebase project?',
+      ]);
       return false;
     }
   };
@@ -71,7 +85,7 @@ export const AuthProvider = (props) => {
     } catch (ex) {
       let msg = `Login failure for email(${email}: ${ex.message})`;
       console.error(msg);
-      setAuthErrorMessage(ex.message);
+      setAuthErrorMessages([ex.message]);
       return false;
     }
   };
@@ -84,7 +98,7 @@ export const AuthProvider = (props) => {
       return true;
     } catch (ex) {
       console.error(ex);
-      setAuthErrorMessage(ex.message);
+      setAuthErrorMessages([ex.message]);
       return false;
     }
   };
@@ -112,17 +126,34 @@ export const AuthProvider = (props) => {
     const listenToUserDoc = async (uid) => {
       try {
         let docRef = doc(myFS, PROFILE_COLLECTION, uid);
-        unsubscribe = await onSnapshot(docRef, (docSnap) => {
-          let profileData = docSnap.data();
-          console.log('Got user profile:', profileData);
-          if (!profileData) {
-            setAuthErrorMessage(`No profile doc found in Firestore at: ${docRef.path}`);
+        unsubscribe = await onSnapshot(
+          docRef,
+          (docSnap) => {
+            let profileData = docSnap.data();
+            console.log('Got user profile:', profileData, docSnap);
+            if (!profileData) {
+              setAuthErrorMessages([
+                `No profile doc found in Firestore at: ${docRef.path}`,
+              ]);
+            }
+            setProfile(profileData);
+          },
+          (firestoreErr) => {
+            console.error(
+              `onSnapshot() callback failed with: ${firestoreErr.message}`,
+              firestoreErr
+            );
+            setAuthErrorMessages([
+              firestoreErr.message,
+              'Have you initialized your Firestore database?',
+            ]);
           }
-          setProfile(profileData);
-        });
+        );
       } catch (ex) {
-        console.error(`useEffect() failed with: ${ex.message}`);
-        setAuthErrorMessage(ex.message);
+        console.error(
+          `useEffect() calling onSnapshot() failed with: ${ex.message}`
+        );
+        setAuthErrorMessages([ex.message]);
       }
     };
 
@@ -135,7 +166,7 @@ export const AuthProvider = (props) => {
     } else if (!user) {
       setAuthLoading(true);
       setProfile(null);
-      setAuthErrorMessage(null);
+      setAuthErrorMessages(null);
     }
   }, [user, setProfile, myFS]);
 
@@ -144,7 +175,7 @@ export const AuthProvider = (props) => {
   }
 
   const theValues = {
-    authErrorMessage,
+    authErrorMessages,
     authLoading,
     profile,
     user,
