@@ -4,6 +4,14 @@ This repository is a React (v18) app that uses a simple, *reusable* pattern for 
 
 This project was created with `npx create-react-app` but includes some tweaks to `index.js` based on the new React 18 [createRoot](https://github.com/reactwg/react-18/discussions/5).
 
+## &lt;FirebaseProvider /&gt;
+
+This component configures the app with your Firebase project's configuration information (the *firebaseConfig*), and gets the various Firebase services available for the rest of the app to use.  The component uses React's Context API to make the services available.
+
+## &lt;AuthProvider /&gt;
+
+This component uses the Auth service (it gets from the &lt;FirebaseProvider /&gt;) to enable the AuthStateChanged listener, makes available functions: `login()`, `logout()` and `register()`, upon successful registration stores "user profile" data to Firestore, and upon a successful login fetches the "user profile" data for the currently logged in user.
+
 ## To Run This Project
 
 1. `git clone https://github.com/gregfenton/react-and-firebase-auth-and-firestore.git`
