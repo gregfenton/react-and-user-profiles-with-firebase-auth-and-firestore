@@ -22,6 +22,9 @@ This component uses the Auth service (it gets from the &lt;FirebaseProvider /&gt
    - Firebase Console >> YOUR_PROJECT >> Authentication >> Sign-In Method
    - If "Email/Password" is not listed under Sign-In Providers, click *Add New Provider* and add it
    - Ensure that Email/Password is *Enabled*
+1. Ensure your Firebase project has enabled the Firestore Database:
+   - Firebase Console >> YOUR_PROJECT >> Firestore Database
+   - if you see a *Create Database* button, click it
 1. Edit the file `FirebaseProvider.js` and update the values in `firebaseConfig` with those of your Firebase project (see comments in the code)
 1. `npm run start`
 
