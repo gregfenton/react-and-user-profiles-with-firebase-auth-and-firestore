@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
-import { AuthContext } from '../providers/AuthProvider';
+import { useState } from 'react';
+import { useAuthContext } from '../providers/AuthProvider';
 
 export const Register = () => {
-  const { register, authErrorMessages } = useContext(AuthContext);
+  const { register, authErrorMessages } = useAuthContext();
 
   const [displayName, setDisplayName] = useState(''); // input field value cannot be null
   const [email, setEmail] = useState(''); // input field value cannot be null

@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../providers/AuthProvider';
+import { useAuthContext } from '../providers/AuthProvider';
 import { Login } from './Login';
 
 const styleBottomCenter = {
@@ -11,7 +10,7 @@ const styleBottomCenter = {
 };
 
 export const RestOfTheApp = () => {
-  const { profile, logout } = useContext(AuthContext);
+  const { profile, logout } = useAuthContext();
 
   if (!profile) {
     return <Login />;

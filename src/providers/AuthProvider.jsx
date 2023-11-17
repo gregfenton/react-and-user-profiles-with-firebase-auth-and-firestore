@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import {
   createUserWithEmailAndPassword,
@@ -8,13 +8,13 @@ import {
 } from 'firebase/auth';
 import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
 
-import { FirebaseContext } from './FirebaseProvider';
+import { useFirebaseContext } from './FirebaseProvider';
 
 export const AuthContext = createContext({});
 
 const PROFILE_COLLECTION = 'users'; // name of the FS collection of user profile docs
 
-export const AuthProvider = (props) => {
+const AuthProvider = (props) => {
   const children = props.children;
 
   const [user, setUser] = useState(null);
@@ -22,7 +22,7 @@ export const AuthProvider = (props) => {
   const [authLoading, setAuthLoading] = useState(true);
   const [authErrorMessages, setAuthErrorMessages] = useState();
 
-  const { myAuth, myFS } = useContext(FirebaseContext);
+  const { myAuth, myFS } = useFirebaseContext();
 
   const registerFunction = async (email, password, displayName = '') => {
     let userCredential;
@@ -188,3 +188,30 @@ export const AuthProvider = (props) => {
     <AuthContext.Provider value={theValues}>{children}</AuthContext.Provider>
   );
 };
+
+/**
+ * A hook that returns the AuthContext's values.
+ * 
+ * @returns {Object} an object with the following properties:
+ * - authErrorMessages: an array of strings, or null
+ * - authLoading: a boolean
+ * - profile: an object, or null
+ * - user: an object, or null
+ * - login: a function that takes an email and password and returns a boolean
+ * - logout: a function that takes no arguments and returns a boolean
+ * - register: a function that takes an email, password, and optional displayName and returns a boolean
+ */
+const useAuthContext = () => {
+  // get the context
+  const context = useContext(AuthContext);
+
+  // if `undefined`, throw an error
+  if (context === undefined) {
+    throw new Error('useAuthContext was used outside of its Provider');
+  }
+
+  return context;
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
+export { AuthProvider, useAuthContext };
