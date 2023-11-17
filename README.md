@@ -4,6 +4,8 @@ This repository is a Vite & React (v18) project that uses a simple, *reusable* p
 
 This project was created with `npx create-vite`.
 
+NOTE: minimal (no?) time was spent on styling in order to focus on Firebase functionality, so the UI is extremely basic (ie: ugly).
+
 ## &lt;FirebaseProvider /&gt;
 
 This component configures the app with your Firebase project's configuration information (the *firebaseConfig*), and gets the various Firebase services available for the rest of the app to use.  The component uses React's Context API to make the services available.
