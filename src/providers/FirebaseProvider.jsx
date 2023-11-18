@@ -89,12 +89,12 @@ const FirebaseProvider = (props) => {
   }
 
   const theValues = {
-    usingEmulators,
     emulatorsConfig,
     myApp,
     myAuth,
     myFS,
     myStorage,
+    usingEmulators,
   };
 
   return (
