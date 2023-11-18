@@ -24,6 +24,80 @@ const AuthProvider = (props) => {
 
   const { myAuth, myFS } = useFirebaseContext();
 
+  // hook into Firebase Authentication
+  useEffect(() => {
+    if (myAuth) {
+      let unsubscribe = onAuthStateChanged(myAuth, (user) => {
+        // if user is null, then we force them to login
+        console.log('onAuthStateChanged(): got user', user);
+        if (user) {
+          setUser(user);
+        }
+
+        setAuthLoading(false);
+      });
+
+      return unsubscribe;
+    }
+  }, [myAuth]);
+
+  // listen to the user profile (FS User doc)
+  useEffect(() => {
+    let unsubscribe = null;
+    const listenToUserDoc = async (uid) => {
+      try {
+        let docRef = doc(myFS, PROFILE_COLLECTION, uid);
+        unsubscribe = await onSnapshot(
+          docRef,
+          (docSnap) => {
+            let profileData = docSnap.data();
+            console.log('Got user profile:', profileData, docSnap);
+            if (!profileData) {
+              setAuthErrorMessages([
+                `No profile doc found in Firestore at: ${docRef.path}`,
+              ]);
+            }
+            setProfile(profileData);
+          },
+          (firestoreErr) => {
+            console.error(
+              `onSnapshot() callback failed with: ${firestoreErr.message}`,
+              firestoreErr
+            );
+            setAuthErrorMessages([
+              firestoreErr.message,
+              'Have you initialized your Firestore database?',
+            ]);
+          }
+        );
+      } catch (ex) {
+        console.error(
+          `useEffect() calling onSnapshot() failed with: ${ex.message}`
+        );
+        setAuthErrorMessages([ex.message]);
+      }
+    };
+
+    if (user?.uid) {
+      listenToUserDoc(user.uid);
+
+      return () => {
+        unsubscribe && unsubscribe();
+      };
+    } else if (!user) {
+      setAuthLoading(true);
+      setProfile(null);
+      setAuthErrorMessages(null);
+    }
+  }, [user, setProfile, myFS]);
+
+  /**
+   *
+   * @param {string} email email address and "login ID" for the new account
+   * @param {string} password password to use for the new account
+   * @param {string} displayName optional display name for the new account
+   * @returns {boolean} true if the account is created, false otherwise
+   */
   const registerFunction = async (email, password, displayName = '') => {
     let userCredential;
     try {
@@ -103,73 +177,6 @@ const AuthProvider = (props) => {
     }
   };
 
-  // hook into Firebase Authentication
-  useEffect(() => {
-    if (myAuth) {
-      let unsubscribe = onAuthStateChanged(myAuth, (user) => {
-        // if user is null, then we force them to login
-        console.log('onAuthStateChanged(): got user', user);
-        if (user) {
-          setUser(user);
-        }
-
-        setAuthLoading(false);
-      });
-
-      return unsubscribe;
-    }
-  }, [myAuth]);
-
-  // listen to the user profile (FS User doc)
-  useEffect(() => {
-    let unsubscribe = null;
-    const listenToUserDoc = async (uid) => {
-      try {
-        let docRef = doc(myFS, PROFILE_COLLECTION, uid);
-        unsubscribe = await onSnapshot(
-          docRef,
-          (docSnap) => {
-            let profileData = docSnap.data();
-            console.log('Got user profile:', profileData, docSnap);
-            if (!profileData) {
-              setAuthErrorMessages([
-                `No profile doc found in Firestore at: ${docRef.path}`,
-              ]);
-            }
-            setProfile(profileData);
-          },
-          (firestoreErr) => {
-            console.error(
-              `onSnapshot() callback failed with: ${firestoreErr.message}`,
-              firestoreErr
-            );
-            setAuthErrorMessages([
-              firestoreErr.message,
-              'Have you initialized your Firestore database?',
-            ]);
-          }
-        );
-      } catch (ex) {
-        console.error(
-          `useEffect() calling onSnapshot() failed with: ${ex.message}`
-        );
-        setAuthErrorMessages([ex.message]);
-      }
-    };
-
-    if (user?.uid) {
-      listenToUserDoc(user.uid);
-
-      return () => {
-        unsubscribe && unsubscribe();
-      };
-    } else if (!user) {
-      setAuthLoading(true);
-      setProfile(null);
-      setAuthErrorMessages(null);
-    }
-  }, [user, setProfile, myFS]);
-
   if (authLoading) {
     return <h1>Loading</h1>;
   }
@@ -191,7 +198,7 @@ const AuthProvider = (props) => {
 
 /**
  * A hook that returns the AuthContext's values.
- * 
+ *
  * @returns {Object} an object with the following properties:
  * - authErrorMessages: an array of strings, or null
  * - authLoading: a boolean
@@ -199,7 +206,7 @@ const AuthProvider = (props) => {
  * - user: an object, or null
  * - login: a function that takes an email and password and returns a boolean
  * - logout: a function that takes no arguments and returns a boolean
- * - register: a function that takes an email, password, and optional displayName and returns a boolean
+ * - register: a function that takes an email, password, and optional displayName and returns true if account is created successfully
  */
 const useAuthContext = () => {
   // get the context
