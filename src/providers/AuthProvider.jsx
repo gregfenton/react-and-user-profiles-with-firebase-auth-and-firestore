@@ -200,13 +200,13 @@ const AuthProvider = (props) => {
  * A hook that returns the AuthContext's values.
  *
  * @returns {Object} an object with the following properties:
- * - authErrorMessages: an array of strings, or null
- * - authLoading: a boolean
- * - profile: an object, or null
- * - user: an object, or null
- * - login: a function that takes an email and password and returns a boolean
- * - logout: a function that takes no arguments and returns a boolean
- * - register: a function that takes an email, password, and optional displayName and returns true if account is created successfully
+ * - `authErrorMessages` {null|string[]}- array of error message strings, or null
+ * - `authLoading` {boolean} - true if authentication is still loading, false otherwise
+ * - `profile` {null|object} - the user profile document from Firestore, or null
+ * - `user` {null|object} - the Auth user object, or null
+ * - `login` {function} - takes an email and password and returns a boolean
+ * - `logout` {function} - takes no arguments and returns a boolean
+ * - `register` {function} - takes an email, password, and optional displayName and returns true if account is created successfully
  */
 const useAuthContext = () => {
   // get the context
