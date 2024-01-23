@@ -8,15 +8,14 @@ import { getStorage, connectStorageEmulator } from 'firebase/storage';
 export const FirebaseContext = createContext({});
 
 const firebaseConfig = {
-  // YOUR FIREBASE APP CONFIG
-  //
-  // Copy contents of firebaseConfig from:
-  //   Log into Firebase Console (https://console.firebase.google.com/)
-  //      >> YOUR_PROJECT
-  //      >> Project Settings
-  //      >> Add App >> Web app  (or use an existing app)
-  //      >> Firebase SDK snippet
-  //      >> Config
+  apiKey: 'AIzaSyA7l3bp6bLVGEJDEn13JbePBVbHI63WFhM',
+  authDomain: 'tick8s-dev-1.firebaseapp.com',
+  databaseURL: 'https://tick8s-dev-1.firebaseio.com',
+  projectId: 'tick8s-dev-1',
+  storageBucket: 'tick8s-dev-1.appspot.com',
+  messagingSenderId: '794441423057',
+  appId: '1:794441423057:web:04b8822e46973b38b44df0',
+  measurementId: 'G-0QL7P8KVKF',
 };
 
 const FirebaseProvider = (props) => {

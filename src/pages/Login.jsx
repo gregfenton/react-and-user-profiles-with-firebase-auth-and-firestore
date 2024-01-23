@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuthContext } from '../providers/AuthProvider';
-import { Register } from './Register';
+import { Register } from '../components/Register';
 
 export const Login = () => {
   const { login, authErrorMessages } = useAuthContext();

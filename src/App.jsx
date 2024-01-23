@@ -1,15 +1,12 @@
-import { AuthProvider } from "./providers/AuthProvider";
-import { FirebaseProvider } from "./providers/FirebaseProvider";
-import { RestOfTheApp } from "./components/RestOfTheApp";
+import { MainRouter } from './components/MainRouter';
+import { AuthProvider } from './providers/AuthProvider';
+import { FirebaseProvider } from './providers/FirebaseProvider';
 
 export const App = () => {
-
   return (
     <FirebaseProvider>
       <AuthProvider>
-
-        <RestOfTheApp />
-
+        <MainRouter />
       </AuthProvider>
     </FirebaseProvider>
   );
