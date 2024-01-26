@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useAuthContext } from '../providers/AuthProvider';
 import { Register } from '../components/Register';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
   const { login, authErrorMessages } = useAuthContext();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState(''); // input field value cannot be null
   const [password, setPassword] = useState(''); // input field value cannot be null
@@ -18,6 +20,9 @@ export const Login = () => {
     setLoginRunning(false);
     if (!success) {
       setErrorMessage('Registration failed!');
+      navigate('/login');
+    } else {
+      navigate('/');
     }
   };
 

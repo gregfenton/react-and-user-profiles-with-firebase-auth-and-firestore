@@ -26,7 +26,7 @@ export const RestOfTheApp = () => {
 
   return (
     <div>
-      <h1>Hello, {profile.displayName}</h1>
+      <h1>Hello {profile.displayName || "[no name]"} ({profile.email})</h1>
       <button onClick={logout}>Logout</button>
 
       <div style={styleBottomCenter}>your email: {profile.email}</div>
