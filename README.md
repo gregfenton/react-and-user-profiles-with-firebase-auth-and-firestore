@@ -27,7 +27,7 @@ This component uses the Auth service (it gets from the &lt;FirebaseProvider /&gt
 1. Ensure your Firebase project has enabled the Firestore Database:
    - Firebase Console >> YOUR_PROJECT >> Firestore Database
    - if you see a _Create Database_ button, click it
-1. Edit the file `FirebaseProvider.jsx` and update the values in `firebaseConfig` with those of your Firebase project (see comments in the code)
+1. Edit the file `src/providers/firebaseConfig.json` and replace the file's contents with your Firebase project's configuration (see comments in the code)
 1. `npm run dev`
 
 Now your browser should automatically open to http://localhost:3000/
