@@ -1,0 +1,10 @@
+{
+  "apiKey": "        YOUR FIREBASE APP CONFIG:                                               ",
+  "authDomain": "        Replace config values in this file with config from:                ",
+  "databaseURL": "         Log into Firebase Console (https://console.firebase.google.com/)  ",
+  "projectId": "              >> YOUR_PROJECT                                                ",
+  "storageBucket": "          >> Project Settings                                            ",
+  "messagingSenderId": "      >> Add App >> Web app  (or use an existing app)                ",
+  "appId": "                  >> Firebase SDK snippet                                        ",
+  "measurementId": "          >> Config                                                      "
+}

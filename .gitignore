@@ -1,3 +1,6 @@
+# Config
+src/providers/firebaseConfig.json
+
 # Logs
 logs
 *.log
@@ -22,4 +25,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-src/providers/firebaseConfig.json

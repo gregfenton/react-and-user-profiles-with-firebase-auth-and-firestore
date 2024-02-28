@@ -17,7 +17,7 @@ This component uses the Auth service (it gets from the &lt;FirebaseProvider /&gt
 ## To Run This Project
 
 1. `git clone https://github.com/gregfenton/react-and-firebase-auth-and-firestore.git`
-1. `cd react-and-firebase-auth-and-firestore`
+1. `cd react-and-and-firebase-auth-and-firestore`
 1. `npm install` to install the NPM dependencies
 1. Open your favourite code editor (e.g. `code .` to run VSCode on this project)
 1. Ensure your Firebase project has enabled the Email/Password sign-in provider:
@@ -27,7 +27,9 @@ This component uses the Auth service (it gets from the &lt;FirebaseProvider /&gt
 1. Ensure your Firebase project has enabled the Firestore Database:
    - Firebase Console >> YOUR_PROJECT >> Firestore Database
    - if you see a _Create Database_ button, click it
-1. Edit the file `src/providers/firebaseConfig.json` and replace the file's contents with your Firebase project's configuration (see comments in the code)
+     - if prompted for Security Rules, choose to go with **_test mode_** for now
+1. Copy the file `src/providers/firebaseConfig.json.example` to `src/providers/firebaseConfig.json`
+1. Edit the file `src/providers/firebaseConfig.json` and replace the file's contents with your Firebase project's configuration (see initial contents of the JSON file for instructions)
 1. `npm run dev`
 
 Now your browser should automatically open to http://localhost:3000/
@@ -50,9 +52,7 @@ From `App.jsx`:
 return (
   <FirebaseProvider>
     <AuthProvider>
-
       <RestOfTheApp />
-
     </AuthProvider>
   </FirebaseProvider>
 );
