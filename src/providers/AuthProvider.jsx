@@ -20,7 +20,7 @@ const AuthProvider = (props) => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [authErrorMessages, setAuthErrorMessages] = useState();
+  const [authErrorMessages, setAuthErrorMessages] = useState(null);
 
   const { myAuth, myFS } = useFirebaseContext();
 
@@ -127,6 +127,7 @@ const AuthProvider = (props) => {
       };
 
       await setDoc(userDocRef, userDocData);
+      setAuthErrorMessages(null);
       return true;
     } catch (ex) {
       console.error(`registerFunction() failed with: ${ex.message}`);
@@ -155,6 +156,7 @@ const AuthProvider = (props) => {
         console.log(`Logged in as uid(${user.uid}) email(${user.email})`);
       }
       setUser(user);
+      setAuthErrorMessages(null);
       return true;
     } catch (ex) {
       let msg = `Login failure for email(${email}: ${ex.message})`;
@@ -169,6 +171,7 @@ const AuthProvider = (props) => {
       setUser(null); // shut down the listeners
       await signOut(myAuth);
       console.log('Signed Out');
+      setAuthErrorMessages(null);
       return true;
     } catch (ex) {
       console.error(ex);
