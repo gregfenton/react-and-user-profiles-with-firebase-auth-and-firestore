@@ -5,31 +5,31 @@ import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { getStorage, connectStorageEmulator } from 'firebase/storage';
 
-export const FirebaseContext = createContext({});
+import myFirebaseConfig from './firebaseConfig.json';
 
-const firebaseConfig = {
-  // YOUR FIREBASE APP CONFIG
-  //
-  // Copy contents of firebaseConfig from:
-  //   Log into Firebase Console (https://console.firebase.google.com/)
-  //      >> YOUR_PROJECT
-  //      >> Project Settings
-  //      >> Add App >> Web app  (or use an existing app)
-  //      >> Firebase SDK snippet
-  //      >> Config
-};
+export const FirebaseContext = createContext({});
 
 const FirebaseProvider = (props) => {
   const { children } = props;
 
-  const [firebaseInitializing, setFirebaseInitializing] = useState(true);
-  const [usingEmulators, setUsingEmulators] = useState(false);
-  const [emulatorsConfig, setEmulatorsConfig] = useState(false);
+  if (
+    !myFirebaseConfig?.projectId ||
+    myFirebaseConfig.projectId.includes('>> YOUR_PROJECT')
+  ) {
+    console.error(
+      'Invalid Firebase configuration in src/providers/firebaseConfig.json'
+    );
+  }
 
-  const myApp = initializeApp(firebaseConfig);
+  const myApp = initializeApp(myFirebaseConfig);
+
   const myAuth = getAuth(myApp);
   const myFS = getFirestore(myApp);
   const myStorage = getStorage(myApp);
+
+  const [firebaseInitializing, setFirebaseInitializing] = useState(true);
+  const [usingEmulators, setUsingEmulators] = useState(false);
+  const [emulatorsConfig, setEmulatorsConfig] = useState(false);
 
   useEffect(() => {
     const shouldUseEmulator = false; // or true :)
@@ -106,7 +106,7 @@ const FirebaseProvider = (props) => {
 
 /**
  * A hook that returns the FirebaseContext's values.
- * 
+ *
  * @returns {Object} - an object with the following properties:
  * - `emulatorsConfig` {object} - configuration for the emulators if `usingEmulators` is true
  * - `myApp` {object} - the Firebase app instance

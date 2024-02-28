@@ -1,3 +1,6 @@
+# Config
+src/providers/firebaseConfig.json
+
 # Logs
 logs
 *.log
