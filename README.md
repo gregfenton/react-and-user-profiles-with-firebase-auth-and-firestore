@@ -4,6 +4,8 @@ This repository is a Vite & React (v18) project that uses a simple, _reusable_ p
 
 This project was created with `npx create-vite`.
 
+The `with_routing` branch of this project adds use of `react-router-dom` solely as a showcase for that additional functionality.  The `main` branch remains extremely bare-bones so as to not distract from the Providers pattern.
+
 NOTE: minimal (no?) time was spent on styling in order to focus on Firebase functionality, so the UI is extremely basic (ie: ugly).
 
 ## &lt;FirebaseProvider /&gt;
