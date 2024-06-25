@@ -29,7 +29,7 @@ export const Register = () => {
   return (
     <div>
       <h2>Register New Account</h2>
-      <table>
+      <table className='center-table'>
         <tbody>
           <tr>
             <td>

@@ -41,7 +41,7 @@ export const Login = () => {
   return (
     <div>
       <h2>Sign In To Existing Account</h2>
-      <table>
+      <table className='center-table'>
         <tbody>
           <tr>
             <td>

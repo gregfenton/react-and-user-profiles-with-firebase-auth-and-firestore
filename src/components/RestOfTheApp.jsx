@@ -6,7 +6,8 @@ const styleBottomCenter = {
   bottom: '10px',
   width: '90%',
   textAlign: 'center',
-  color: 'magenta'
+  color: 'magenta',
+  font: 'italic bold 20px arial,serif',
 };
 
 export const RestOfTheApp = () => {
