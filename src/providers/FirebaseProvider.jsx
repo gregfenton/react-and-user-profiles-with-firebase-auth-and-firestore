@@ -107,13 +107,15 @@ const FirebaseProvider = (props) => {
 /**
  * A hook that returns the FirebaseContext's values.
  *
- * @returns {Object} - an object with the following properties:
- * - `emulatorsConfig` {object} - configuration for the emulators if `usingEmulators` is true
- * - `myApp` {object} - the Firebase app instance
- * - `myAuth` {object} - the Auth instance
- * - `myFS` {object} - the Firestore instance
- * - `myStorage` {object} - the Cloud Storage instance
- * - `usingEmulators` {boolean} - true if using emulators, false otherwise
+ * @typedef {Object} FirebaseContextValues
+ * @property {import('firebase/app').FirebaseApp} myApp - the Firebase app instance
+ * @property {import('firebase/auth').Auth} myAuth - the Firebase Auth instance
+ * @property {import('firebase/firestore').Firestore} myFS - the Firestore instance
+ * @property {import('firebase/storage').FirebaseStorage} myStorage - the Firebase Cloud Storage instance
+ * @property {boolean} usingEmulators - true if using emulators, false otherwise
+ * @property {object} emulatorsConfig - configuration for the emulators if `usingEmulators` is true
+ * 
+ * @returns {FirebaseContextValues}
  */
 const useFirebaseContext = () => {
   // get the context
