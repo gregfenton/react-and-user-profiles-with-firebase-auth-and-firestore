@@ -1,6 +1,6 @@
 {
-  "name": "simple-react-firebase-auth",
-  "version": "0.2.0",
+  "name": "react-and-user-profiles-with-firebase",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,18 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "firebase": "^10.11.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "firebase": "^10.12.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/react": "^18.2.79",
-    "@types/react-dom": "^18.2.25",
-    "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6",
-    "vite": "^5.2.10"
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "~8.57.0",
+    "eslint-plugin-react": "^7.34.3",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "vite": "^5.3.1"
   }
 }
