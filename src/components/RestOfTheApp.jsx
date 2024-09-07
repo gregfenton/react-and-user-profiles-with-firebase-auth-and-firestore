@@ -1,13 +1,13 @@
-import { useAuthContext } from '../providers/AuthProvider';
-import { Login } from './Login';
+import { useAuthContext } from "../providers/AuthProvider";
+import { Login } from "./Login";
 
 const styleBottomCenter = {
-  position: 'absolute',
-  bottom: '10px',
-  width: '90%',
-  textAlign: 'center',
-  color: 'magenta',
-  font: 'italic bold 20px arial,serif',
+  position: "absolute",
+  bottom: "10px",
+  width: "90%",
+  textAlign: "center",
+  color: "magenta",
+  font: "italic bold 20px arial,serif",
 };
 
 export const RestOfTheApp = () => {

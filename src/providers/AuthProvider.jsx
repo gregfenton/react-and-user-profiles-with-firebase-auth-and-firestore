@@ -1,18 +1,18 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from "react";
 
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
-} from 'firebase/auth';
-import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
+} from "firebase/auth";
+import { doc, onSnapshot, setDoc, serverTimestamp } from "firebase/firestore";
 
-import { useFirebaseContext } from './FirebaseProvider';
+import { useFirebaseContext } from "./FirebaseProvider";
 
 export const AuthContext = createContext({});
 
-const PROFILE_COLLECTION = 'users'; // name of the FS collection of user profile docs
+const PROFILE_COLLECTION = "users"; // name of the FS collection of user profile docs
 
 const AuthProvider = (props) => {
   const children = props.children;
@@ -29,7 +29,7 @@ const AuthProvider = (props) => {
     if (myAuth) {
       let unsubscribe = onAuthStateChanged(myAuth, (user) => {
         // if user is null, then we force them to login
-        console.log('onAuthStateChanged(): got user', user);
+        console.log("onAuthStateChanged(): got user", user);
         if (user) {
           setUser(user);
         }
@@ -51,7 +51,7 @@ const AuthProvider = (props) => {
           docRef,
           (docSnap) => {
             let profileData = docSnap.data();
-            console.log('Got user profile:', profileData, docSnap);
+            console.log("Got user profile:", profileData, docSnap);
             if (!profileData) {
               setAuthErrorMessages([
                 `No profile doc found in Firestore at: ${docRef.path}`,
@@ -62,17 +62,17 @@ const AuthProvider = (props) => {
           (firestoreErr) => {
             console.error(
               `onSnapshot() callback failed with: ${firestoreErr.message}`,
-              firestoreErr
+              firestoreErr,
             );
             setAuthErrorMessages([
               firestoreErr.message,
-              'Have you initialized your Firestore database?',
+              "Have you initialized your Firestore database?",
             ]);
-          }
+          },
         );
       } catch (ex) {
         console.error(
-          `useEffect() calling onSnapshot() failed with: ${ex.message}`
+          `useEffect() calling onSnapshot() failed with: ${ex.message}`,
         );
         setAuthErrorMessages([ex.message]);
       }
@@ -98,19 +98,19 @@ const AuthProvider = (props) => {
    * @param {string} displayName optional display name for the new account
    * @returns {boolean} true if the account is created, false otherwise
    */
-  const registerFunction = async (email, password, displayName = '') => {
+  const registerFunction = async (email, password, displayName = "") => {
     let userCredential;
     try {
       userCredential = await createUserWithEmailAndPassword(
         myAuth,
         email,
-        password
+        password,
       );
     } catch (ex) {
       console.error(`registerFunction() failed with: ${ex.message}`);
       setAuthErrorMessages([
         ex.message,
-        'Did you enable the Email Provider in Firebase Auth?',
+        "Did you enable the Email Provider in Firebase Auth?",
       ]);
       return false;
     }
@@ -118,7 +118,7 @@ const AuthProvider = (props) => {
     try {
       let user = userCredential.user;
 
-      let userDocRef = doc(myFS, 'users', user.uid);
+      let userDocRef = doc(myFS, "users", user.uid);
       let userDocData = {
         uid: user.uid,
         email: email,
@@ -132,7 +132,7 @@ const AuthProvider = (props) => {
       console.error(`registerFunction() failed with: ${ex.message}`);
       setAuthErrorMessages([
         ex.message,
-        'Did you enable the Firestore Database in your Firebase project?',
+        "Did you enable the Firestore Database in your Firebase project?",
       ]);
       return false;
     }
@@ -143,7 +143,7 @@ const AuthProvider = (props) => {
       let userCredential = await signInWithEmailAndPassword(
         myAuth,
         email,
-        password
+        password,
       );
 
       let user = userCredential.user;
@@ -168,7 +168,7 @@ const AuthProvider = (props) => {
     try {
       setUser(null); // shut down the listeners
       await signOut(myAuth);
-      console.log('Signed Out');
+      console.log("Signed Out");
       return true;
     } catch (ex) {
       console.error(ex);
@@ -201,7 +201,7 @@ const AuthProvider = (props) => {
  *
  * @typedef {import('firebase/auth').User} AuthUser
  * @typedef {import('firebase/firestore').DocumentData} FirestoreDocument
- * 
+ *
  * @typedef {Object} AuthContextValues
  * @property {null|string[]} authErrorMessages - array of error message strings, or null
  * @property {boolean} authLoading - true if authentication is still loading, false otherwise
@@ -210,7 +210,7 @@ const AuthProvider = (props) => {
  * @property {(email: string, password: string) => Promise<boolean>} login - takes an email and password and returns a boolean
  * @property {() => Promise<boolean>} logout - takes no arguments and returns a boolean
  * @property {(email: string, password: string, displayName: string) => Promise<boolean>} register - takes an email, password, and optional displayName and returns true if account is created successfully
- * 
+ *
  * @returns {AuthContextValues}
  */
 const useAuthContext = () => {
@@ -219,11 +219,10 @@ const useAuthContext = () => {
 
   // if `undefined`, throw an error
   if (context === undefined) {
-    throw new Error('useAuthContext was used outside of its Provider');
+    throw new Error("useAuthContext was used outside of its Provider");
   }
 
   return context;
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export { AuthProvider, useAuthContext };
