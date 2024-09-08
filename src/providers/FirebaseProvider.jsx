@@ -6,20 +6,19 @@ import {createContext, useContext, useEffect, useState} from 'react';
 
 import myFirebaseConfig from './firebaseConfig.json';
 
+const myApp = initializeApp(myFirebaseConfig);
+const myAuth = getAuth(myApp);
+const myFS = getFirestore(myApp);
+const myStorage = getStorage(myApp);
+
 export const FirebaseContext = createContext({});
 
-const FirebaseProvider = (props) => {
+export const FirebaseProvider = (props) => {
   const {children} = props;
 
   if (!myFirebaseConfig?.projectId || myFirebaseConfig.projectId.includes('>> YOUR_PROJECT')) {
     console.error('Invalid Firebase configuration in src/providers/firebaseConfig.json');
   }
-
-  const myApp = initializeApp(myFirebaseConfig);
-
-  const myAuth = getAuth(myApp);
-  const myFS = getFirestore(myApp);
-  const myStorage = getStorage(myApp);
 
   const [firebaseInitializing, setFirebaseInitializing] = useState(true);
   const [usingEmulators, setUsingEmulators] = useState(false);
@@ -28,7 +27,7 @@ const FirebaseProvider = (props) => {
   useEffect(() => {
     const shouldUseEmulator = false; // or true :)
 
-    if (shouldUseEmulator) {
+    if (shouldUseEmulator && myAuth && myFS && myStorage) {
       let mapEmulators = {};
 
       let FS_HOST = 'localhost';
@@ -77,7 +76,7 @@ const FirebaseProvider = (props) => {
   }, [myAuth, myFS, myStorage]);
 
   if (firebaseInitializing) {
-    return <h1>Loading</h1>;
+    return null;
   }
 
   const theValues = {
@@ -105,7 +104,7 @@ const FirebaseProvider = (props) => {
  *
  * @returns {FirebaseContextValues}
  */
-const useFirebaseContext = () => {
+export const useFirebaseContext = () => {
   // get the context
   const context = useContext(FirebaseContext);
 
@@ -116,5 +115,3 @@ const useFirebaseContext = () => {
 
   return context;
 };
-
-export {FirebaseProvider, useFirebaseContext};

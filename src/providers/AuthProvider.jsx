@@ -13,11 +13,11 @@ export const AuthContext = createContext({});
 
 const PROFILE_COLLECTION = 'users'; // name of the FS collection of user profile docs
 
-const AuthProvider = (props) => {
+export const AuthProvider = (props) => {
   const children = props.children;
 
   const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState();
   const [authLoading, setAuthLoading] = useState(true);
   const [authErrorMessages, setAuthErrorMessages] = useState();
 
@@ -27,12 +27,7 @@ const AuthProvider = (props) => {
   useEffect(() => {
     if (myAuth) {
       let unsubscribe = onAuthStateChanged(myAuth, (user) => {
-        // if user is null, then we force them to login
-        console.log('onAuthStateChanged(): got user', user);
-        if (user) {
-          setUser(user);
-        }
-
+        setUser(user);
         setAuthLoading(false);
       });
 
@@ -48,14 +43,17 @@ const AuthProvider = (props) => {
         docRef,
         (docSnap) => {
           let profileData = docSnap.data();
-          console.log('Got user profile:', profileData, docSnap);
+          console.log('<AuthProvider>: got user profile:', profileData, docSnap);
           if (!profileData) {
             setAuthErrorMessages([`No profile doc found in Firestore at: ${docRef.path}`]);
           }
           setProfile(profileData);
         },
         (firestoreErr) => {
-          console.error(`onSnapshot() callback failed with: ${firestoreErr.message}`, firestoreErr);
+          console.error(
+            `<AuthProvider>: onSnapshot() callback failed with: ${firestoreErr.message}`,
+            firestoreErr,
+          );
           setAuthErrorMessages([
             firestoreErr.message,
             'Have you initialized your Firestore database?',
@@ -73,7 +71,7 @@ const AuthProvider = (props) => {
     } else if (!user) {
       setAuthLoading(true);
       setProfile(null);
-      setAuthErrorMessages(null);
+      setAuthErrorMessages(undefined);
     }
   }, [user, setProfile, myFS]);
 
@@ -89,7 +87,7 @@ const AuthProvider = (props) => {
     try {
       userCredential = await createUserWithEmailAndPassword(myAuth, email, password);
     } catch (ex) {
-      console.error(`registerFunction() failed with: ${ex.message}`);
+      console.error(`<AuthProvider>: registerFunction() failed with: ${ex.message}`);
       setAuthErrorMessages([ex.message, 'Did you enable the Email Provider in Firebase Auth?']);
       return false;
     }
@@ -108,7 +106,7 @@ const AuthProvider = (props) => {
       await setDoc(userDocRef, userDocData);
       return true;
     } catch (ex) {
-      console.error(`registerFunction() failed with: ${ex.message}`);
+      console.error(`<AuthProvider>: registerFunction() failed with: ${ex.message}`);
       setAuthErrorMessages([
         ex.message,
         'Did you enable the Firestore Database in your Firebase project?',
@@ -132,9 +130,9 @@ const AuthProvider = (props) => {
       setUser(user);
       return true;
     } catch (ex) {
-      let msg = `Login failure for email(${email}: ${ex.message})`;
-      console.error(msg);
-      setAuthErrorMessages([ex.message]);
+      const msg = Object.hasOwnProperty.call(ex, 'message') ? ex.message : JSON.stringify(ex);
+      console.error(`<AuthProvider>: Login failure for email(${email}: ${msg})`);
+      setAuthErrorMessages([msg]);
       return false;
     }
   };
@@ -146,14 +144,15 @@ const AuthProvider = (props) => {
       console.log('Signed Out');
       return true;
     } catch (ex) {
-      console.error(ex);
-      setAuthErrorMessages([ex.message]);
+      const msg = Object.hasOwnProperty.call(ex, 'message') ? ex.message : JSON.stringify(ex);
+      console.error(msg);
+      setAuthErrorMessages([msg]);
       return false;
     }
   };
 
   if (authLoading) {
-    return <h1>Loading</h1>;
+    return null;
   }
 
   const theValues = {
@@ -186,7 +185,7 @@ const AuthProvider = (props) => {
  *
  * @returns {AuthContextValues}
  */
-const useAuthContext = () => {
+export const useAuthContext = () => {
   // get the context
   const context = useContext(AuthContext);
 
@@ -197,5 +196,3 @@ const useAuthContext = () => {
 
   return context;
 };
-
-export {AuthProvider, useAuthContext};
