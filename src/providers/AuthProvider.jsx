@@ -43,47 +43,39 @@ const AuthProvider = (props) => {
 
   // listen to the user profile (FS User doc)
   useEffect(() => {
-    let unsubscribe = null;
-    const listenToUserDoc = async (uid) => {
-      try {
-        let docRef = doc(myFS, PROFILE_COLLECTION, uid);
-        unsubscribe = await onSnapshot(
-          docRef,
-          (docSnap) => {
-            let profileData = docSnap.data();
-            console.log("Got user profile:", profileData, docSnap);
-            if (!profileData) {
-              setAuthErrorMessages([
-                `No profile doc found in Firestore at: ${docRef.path}`,
-              ]);
-            }
-            setProfile(profileData);
-          },
-          (firestoreErr) => {
-            console.error(
-              `onSnapshot() callback failed with: ${firestoreErr.message}`,
-              firestoreErr,
-            );
+    const listenToUserDoc = (uid) => {
+      let docRef = doc(myFS, PROFILE_COLLECTION, uid);
+      return onSnapshot(
+        docRef,
+        (docSnap) => {
+          let profileData = docSnap.data();
+          console.log("Got user profile:", profileData, docSnap);
+          if (!profileData) {
             setAuthErrorMessages([
-              firestoreErr.message,
-              "Have you initialized your Firestore database?",
+              `No profile doc found in Firestore at: ${docRef.path}`,
             ]);
-          },
-        );
-      } catch (ex) {
-        console.error(
-          `useEffect() calling onSnapshot() failed with: ${ex.message}`,
-        );
-        setAuthErrorMessages([ex.message]);
-      }
+          }
+          setProfile(profileData);
+        },
+        (firestoreErr) => {
+          console.error(
+            `onSnapshot() callback failed with: ${firestoreErr.message}`,
+            firestoreErr,
+          );
+          setAuthErrorMessages([
+            firestoreErr.message,
+            "Have you initialized your Firestore database?",
+          ]);
+        },
+      );
     };
 
     if (user?.uid) {
-      listenToUserDoc(user.uid);
+      const unsubscribeFn = listenToUserDoc(user.uid);
 
-      return () => {
-        unsubscribe && unsubscribe();
-      };
+      // if a useEffect returns a function, that function gets called
+      // when the component is unmounted
+      return unsubscribeFn;
     } else if (!user) {
       setAuthLoading(true);
       setProfile(null);
