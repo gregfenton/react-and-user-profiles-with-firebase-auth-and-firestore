@@ -6,6 +6,8 @@ This project was created with `npx create-vite`.
 
 NOTE: minimal (no?) time was spent on styling in order to focus on Firebase functionality, so the UI is extremely basic (ie: ugly).
 
+NOTE #2: This is a peer project to [expo-and-firebase-auth-firestore](https://github.com/gregfenton/expo-and-firebase-auth-and-firestore).  The goal is to have the two providers (`FirebaseProvider` and `AuthProvider`) be _nearly identical_ in both projects.
+
 ## &lt;FirebaseProvider /&gt;
 
 This component configures the app with your Firebase project's configuration information (the _firebaseConfig_), and gets the various Firebase services available for the rest of the app to use. The component uses React's Context API to make the services available.

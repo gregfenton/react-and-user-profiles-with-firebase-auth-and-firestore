@@ -7,9 +7,12 @@ import {createContext, useContext, useEffect, useState} from 'react';
 import myFirebaseConfig from './firebaseConfig.json';
 
 const myApp = initializeApp(myFirebaseConfig);
-const myAuth = getAuth(myApp);
+
 const myFS = getFirestore(myApp);
 const myStorage = getStorage(myApp);
+
+// separated `myAuth` because in Expo/RN we do more work setting up Auth
+const myAuth = getAuth(myApp);
 
 export const FirebaseContext = createContext({});
 
