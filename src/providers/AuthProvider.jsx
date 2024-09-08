@@ -1,18 +1,17 @@
-import { createContext, useContext, useEffect, useState } from "react";
-
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
-} from "firebase/auth";
-import { doc, onSnapshot, setDoc, serverTimestamp } from "firebase/firestore";
+} from 'firebase/auth';
+import {doc, onSnapshot, serverTimestamp, setDoc} from 'firebase/firestore';
+import {createContext, useContext, useEffect, useState} from 'react';
 
-import { useFirebaseContext } from "./FirebaseProvider";
+import {useFirebaseContext} from './FirebaseProvider';
 
 export const AuthContext = createContext({});
 
-const PROFILE_COLLECTION = "users"; // name of the FS collection of user profile docs
+const PROFILE_COLLECTION = 'users'; // name of the FS collection of user profile docs
 
 const AuthProvider = (props) => {
   const children = props.children;
@@ -22,14 +21,14 @@ const AuthProvider = (props) => {
   const [authLoading, setAuthLoading] = useState(true);
   const [authErrorMessages, setAuthErrorMessages] = useState();
 
-  const { myAuth, myFS } = useFirebaseContext();
+  const {myAuth, myFS} = useFirebaseContext();
 
   // hook into Firebase Authentication
   useEffect(() => {
     if (myAuth) {
       let unsubscribe = onAuthStateChanged(myAuth, (user) => {
         // if user is null, then we force them to login
-        console.log("onAuthStateChanged(): got user", user);
+        console.log('onAuthStateChanged(): got user', user);
         if (user) {
           setUser(user);
         }
@@ -49,22 +48,17 @@ const AuthProvider = (props) => {
         docRef,
         (docSnap) => {
           let profileData = docSnap.data();
-          console.log("Got user profile:", profileData, docSnap);
+          console.log('Got user profile:', profileData, docSnap);
           if (!profileData) {
-            setAuthErrorMessages([
-              `No profile doc found in Firestore at: ${docRef.path}`,
-            ]);
+            setAuthErrorMessages([`No profile doc found in Firestore at: ${docRef.path}`]);
           }
           setProfile(profileData);
         },
         (firestoreErr) => {
-          console.error(
-            `onSnapshot() callback failed with: ${firestoreErr.message}`,
-            firestoreErr,
-          );
+          console.error(`onSnapshot() callback failed with: ${firestoreErr.message}`, firestoreErr);
           setAuthErrorMessages([
             firestoreErr.message,
-            "Have you initialized your Firestore database?",
+            'Have you initialized your Firestore database?',
           ]);
         },
       );
@@ -90,27 +84,20 @@ const AuthProvider = (props) => {
    * @param {string} displayName optional display name for the new account
    * @returns {boolean} true if the account is created, false otherwise
    */
-  const registerFunction = async (email, password, displayName = "") => {
+  const registerFunction = async (email, password, displayName = '') => {
     let userCredential;
     try {
-      userCredential = await createUserWithEmailAndPassword(
-        myAuth,
-        email,
-        password,
-      );
+      userCredential = await createUserWithEmailAndPassword(myAuth, email, password);
     } catch (ex) {
       console.error(`registerFunction() failed with: ${ex.message}`);
-      setAuthErrorMessages([
-        ex.message,
-        "Did you enable the Email Provider in Firebase Auth?",
-      ]);
+      setAuthErrorMessages([ex.message, 'Did you enable the Email Provider in Firebase Auth?']);
       return false;
     }
 
     try {
       let user = userCredential.user;
 
-      let userDocRef = doc(myFS, "users", user.uid);
+      let userDocRef = doc(myFS, 'users', user.uid);
       let userDocData = {
         uid: user.uid,
         email: email,
@@ -124,7 +111,7 @@ const AuthProvider = (props) => {
       console.error(`registerFunction() failed with: ${ex.message}`);
       setAuthErrorMessages([
         ex.message,
-        "Did you enable the Firestore Database in your Firebase project?",
+        'Did you enable the Firestore Database in your Firebase project?',
       ]);
       return false;
     }
@@ -132,11 +119,7 @@ const AuthProvider = (props) => {
 
   const loginFunction = async (email, password) => {
     try {
-      let userCredential = await signInWithEmailAndPassword(
-        myAuth,
-        email,
-        password,
-      );
+      let userCredential = await signInWithEmailAndPassword(myAuth, email, password);
 
       let user = userCredential.user;
       if (!user?.uid) {
@@ -160,7 +143,7 @@ const AuthProvider = (props) => {
     try {
       setUser(null); // shut down the listeners
       await signOut(myAuth);
-      console.log("Signed Out");
+      console.log('Signed Out');
       return true;
     } catch (ex) {
       console.error(ex);
@@ -183,9 +166,7 @@ const AuthProvider = (props) => {
     register: registerFunction,
   };
 
-  return (
-    <AuthContext.Provider value={theValues}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={theValues}>{children}</AuthContext.Provider>;
 };
 
 /**
@@ -211,10 +192,10 @@ const useAuthContext = () => {
 
   // if `undefined`, throw an error
   if (context === undefined) {
-    throw new Error("useAuthContext was used outside of its Provider");
+    throw new Error('useAuthContext was used outside of its Provider');
   }
 
   return context;
 };
 
-export { AuthProvider, useAuthContext };
+export {AuthProvider, useAuthContext};

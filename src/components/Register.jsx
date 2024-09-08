@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { useAuthContext } from "../providers/AuthProvider";
+import {useState} from 'react';
+import {useAuthContext} from '../providers/AuthProvider';
 
 export const Register = () => {
-  const { register, authErrorMessages } = useAuthContext();
+  const {register, authErrorMessages} = useAuthContext();
 
-  const [displayName, setDisplayName] = useState(""); // input field value cannot be null
-  const [email, setEmail] = useState(""); // input field value cannot be null
-  const [password, setPassword] = useState(""); // input field value cannot be null
+  const [displayName, setDisplayName] = useState(''); // input field value cannot be null
+  const [email, setEmail] = useState(''); // input field value cannot be null
+  const [password, setPassword] = useState(''); // input field value cannot be null
 
   const [registrationRunning, setRegistrationRunning] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
@@ -16,13 +16,13 @@ export const Register = () => {
 
     let theDisplayName = displayName;
     if (theDisplayName?.length <= 0) {
-      theDisplayName = "NO DISPLAY NAME PROVIDED 😟";
+      theDisplayName = 'NO DISPLAY NAME PROVIDED 😟';
     }
 
     let success = await register(email, password, theDisplayName);
     setRegistrationRunning(false);
     if (!success) {
-      setErrorMessage("Registration failed!");
+      setErrorMessage('Registration failed!');
     }
   };
 
@@ -72,16 +72,16 @@ export const Register = () => {
           </tr>
           <tr>
             {!registrationRunning ? (
-              <td colSpan={2} style={{ textAlign: "center" }}>
-                <button style={{ width: "75%" }} onClick={handleButtonClick}>
+              <td colSpan={2} style={{textAlign: 'center'}}>
+                <button style={{width: '75%'}} onClick={handleButtonClick}>
                   Create User
                 </button>
                 {errorMessage && (
                   <>
                     <br />
-                    <h3 style={{ color: "red" }}>{errorMessage}</h3>
+                    <h3 style={{color: 'red'}}>{errorMessage}</h3>
                     {authErrorMessages?.map((errorLine, idx) => (
-                      <h4 key={`errmsg-${idx}`} style={{ color: "red" }}>
+                      <h4 key={`errmsg-${idx}`} style={{color: 'red'}}>
                         {errorLine}
                       </h4>
                     ))}
@@ -90,7 +90,7 @@ export const Register = () => {
               </td>
             ) : (
               <td>
-                <h6 style={{ color: "green" }}>
+                <h6 style={{color: 'green'}}>
                   <em>registering...</em>
                 </h6>
               </td>

@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { useAuthContext } from "../providers/AuthProvider";
-import { Register } from "./Register";
+import {useState} from 'react';
+import {useAuthContext} from '../providers/AuthProvider';
+import {Register} from './Register';
 
 export const Login = () => {
-  const { login, authErrorMessages } = useAuthContext();
+  const {login, authErrorMessages} = useAuthContext();
 
-  const [email, setEmail] = useState(""); // input field value cannot be null
-  const [password, setPassword] = useState(""); // input field value cannot be null
+  const [email, setEmail] = useState(''); // input field value cannot be null
+  const [password, setPassword] = useState(''); // input field value cannot be null
 
   const [loginRunning, setLoginRunning] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
@@ -17,7 +17,7 @@ export const Login = () => {
     let success = await login(email, password);
     setLoginRunning(false);
     if (!success) {
-      setErrorMessage("Registration failed!");
+      setErrorMessage('Registration failed!');
     }
   };
 
@@ -31,9 +31,7 @@ export const Login = () => {
         <Register />
         <br />
         <br />
-        <button onClick={toggleShowRegisterScreen}>
-          Sign In To Existing Account
-        </button>
+        <button onClick={toggleShowRegisterScreen}>Sign In To Existing Account</button>
       </div>
     );
   }
@@ -71,16 +69,16 @@ export const Login = () => {
           </tr>
           <tr>
             {!loginRunning ? (
-              <td colSpan={2} style={{ textAlign: "center" }}>
-                <button style={{ width: "75%" }} onClick={handleButtonClick}>
+              <td colSpan={2} style={{textAlign: 'center'}}>
+                <button style={{width: '75%'}} onClick={handleButtonClick}>
                   Login
                 </button>
                 {(errorMessage || authErrorMessages) && (
                   <>
                     <br />
-                    <h3 style={{ color: "red" }}>{errorMessage}</h3>
+                    <h3 style={{color: 'red'}}>{errorMessage}</h3>
                     {authErrorMessages?.map((errorLine, idx) => (
-                      <h4 key={`errmsg-${idx}`} style={{ color: "red" }}>
+                      <h4 key={`errmsg-${idx}`} style={{color: 'red'}}>
                         {errorLine}
                       </h4>
                     ))}
@@ -89,7 +87,7 @@ export const Login = () => {
               </td>
             ) : (
               <td>
-                <h6 style={{ color: "green" }}>
+                <h6 style={{color: 'green'}}>
                   <em>logging in...</em>
                 </h6>
               </td>

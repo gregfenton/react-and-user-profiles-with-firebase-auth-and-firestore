@@ -1,7 +1,7 @@
-import { AuthProvider } from "./providers/AuthProvider";
-import { FirebaseProvider } from "./providers/FirebaseProvider";
-import { RestOfTheApp } from "./components/RestOfTheApp";
-import "./App.css";
+import {AuthProvider} from './providers/AuthProvider';
+import {FirebaseProvider} from './providers/FirebaseProvider';
+import {RestOfTheApp} from './components/RestOfTheApp';
+import './App.css';
 
 export const App = () => {
   return (
